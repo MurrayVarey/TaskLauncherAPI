@@ -18,27 +18,23 @@ namespace TaskLauncherAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> OnPostUploadAsync(List<IFormFile> files)
+        public async Task<IActionResult> OnPostUploadAsync(IFormFile formFile)
         {
-            long size = files.Sum(f => f.Length);
-
-            foreach (var formFile in files)
+            var filePath = "";
+            if (formFile.Length > 0)
             {
-                if (formFile.Length > 0)
-                {
-                    var filePath = Path.GetTempFileName();
+                filePath = Path.GetTempFileName();
 
-                    using (var stream = System.IO.File.Create(filePath))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await formFile.CopyToAsync(stream);
                 }
             }
 
             // Process uploaded files
             // Don't rely on or trust the FileName property without validation.
 
-            return Ok(new { count = files.Count, size });
+            return Ok(new { formFile.Length,  filePath});
         }
     }
 }
