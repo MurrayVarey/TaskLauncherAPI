@@ -12,5 +12,12 @@ namespace TaskLauncherAPI.Controllers
         {
             return new string[] {"hardcoded"};
         }
+
+        [HttpPost]
+        public ActionResult<string> PostTaskRequest()
+        {
+
+            return "posted";
+        }
     }
 }
